@@ -2,22 +2,30 @@
   <div class="navbar">
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb class="breadcrumb-container" />
+    <div class="app-breadcrumb">
+      公司名称
+    </div>
+    <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
+          <img v-imageerror="defaultImg" :src="staffPhoto" class="user-avatar">
+          <span class="name">{{ name }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              Home
+              首页
             </el-dropdown-item>
           </router-link>
           <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
             <el-dropdown-item>Github</el-dropdown-item>
+          </a>
+          <a target="_blank" href="http://ihrm-java.itheima.net/">
+            <el-dropdown-item>黑马Github</el-dropdown-item>
           </a>
           <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
             <el-dropdown-item>Docs</el-dropdown-item>
@@ -33,18 +41,24 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
+// import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 
 export default {
   components: {
-    Breadcrumb,
+    // Breadcrumb,
     Hamburger
+  },
+  data() {
+    return {
+      defaultImg: require('@/assets/common/head.jpg')
+    }
   },
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'staffPhoto',
+      'name'
     ])
   },
   methods: {
@@ -65,7 +79,8 @@ export default {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background: #fff;
+  // background: #fff;
+  background-image: -webkit-linear-gradient(left,#3d6df8,#5b8cff);
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
@@ -75,12 +90,19 @@ export default {
     cursor: pointer;
     transition: background .3s;
     -webkit-tap-highlight-color:transparent;
-
     &:hover {
       background: rgba(0, 0, 0, .025)
     }
   }
 
+  .app-breadcrumb{
+    line-height: 46px;
+    height: 100%;
+    float: left;
+    transition: background .3s;
+    color:white;
+    -webkit-tap-highlight-color: transparent;
+  }
   .breadcrumb-container {
     float: left;
   }
@@ -94,6 +116,11 @@ export default {
       outline: none;
     }
 
+    .name{
+      color: white;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
     .right-menu-item {
       display: inline-block;
       padding: 0 8px;
@@ -121,8 +148,9 @@ export default {
 
         .user-avatar {
           cursor: pointer;
-          width: 40px;
-          height: 40px;
+          width: 30px;
+          height: 30px;
+          vertical-align: middle;
           border-radius: 10px;
         }
 
@@ -132,6 +160,7 @@ export default {
           right: -20px;
           top: 25px;
           font-size: 12px;
+          color: white;
         }
       }
     }

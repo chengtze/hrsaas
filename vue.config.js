@@ -37,13 +37,14 @@ module.exports = {
       errors: true
     },
     // before: require('./mock/mock-server.js')
-    //反向代理
-    proxy:{
-      "/api":{
-        target: "http://ihrm-java.itheima.net",
-        changeOrigin:true,
+    // 反向代理
+    proxy: {
+      '/api': {
+        // target: "http://ihrm-java.itheima.net",
+        target: 'http://ihrm.itheima.net',
+        changeOrigin: true
         // pathRewrite:{}
-      },
+      }
       // "/abc":{
 
       // }

@@ -1,8 +1,11 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import { Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+// import { getToken } from '@/utils/auth'
 import router from '@/router'
+import { getTimeStamp } from '@/utils/auth'
+
+const dTimeOut = 3600
 
 // create an axios instance
 const service = axios.create({
@@ -20,7 +23,13 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+      // config.headers['X-Token'] = getToken()
+      if (IsCheckTimeOut()) {
+        store.dispatch('user/logout')
+        router.push('/login')
+        return Promise.reject(new Error('token超时'))
+      }
+      config.headers['Authorization'] = `Bearer ${store.getters.token}`
     }
     return config
   },
@@ -40,9 +49,12 @@ service.interceptors.response.use(
 
   response => {
     const { success, message, data } = response.data
-    if (success) { return data } else {
+    if (success) {
+      return data
+    } else {
       Message.error(message)// 提示错误消息
       // 业务错误
+      // return data
       return Promise.reject(new Error(message))
     }
   },
@@ -100,5 +112,12 @@ service.interceptors.response.use(
   //   return Promise.reject(error)
   // }
 )
+
+function IsCheckTimeOut() {
+  const currentTime = Date.now()
+  const durationTime = (currentTime - getTimeStamp()) / 1000
+  console.log(durationTime)
+  return durationTime > dTimeOut
+}
 
 export default service

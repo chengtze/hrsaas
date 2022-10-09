@@ -2,15 +2,20 @@ import router from '@/router'
 import store from '@/store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
+// import { getUserInfo } from './api/user'
 
 const whiteList = ['/login', '/404'] // no redirect whitelist
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   NProgress.start()
   if (store.getters.token) {
     if (to.path === '/login') {
       next('/')
     } else {
+      // if (!store.state.user.userInfo.userId) {
+      if (!store.state.userId) {
+        await store.dispatch('user/getUserInfo')
+      }
       next()
     }
     NProgress.done()
