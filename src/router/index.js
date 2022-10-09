@@ -1,6 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import approvals from './modules/approvals'
+import attendances from './modules/attendances'
+import departments from './modules/departments'
+import employees from './modules/employees'
+import permission from './modules/permission'
+import salarys from './modules/salarys'
+import setting from './modules/setting'
+import social from './modules/social'
 Vue.use(Router)
 
 /* Layout */
@@ -25,6 +32,16 @@ import Layout from '@/layout'
   }
  */
 
+export const asyncRouters = [
+  social,
+  setting,
+  salarys,
+  permission,
+  employees,
+  departments,
+  attendances,
+  approvals
+]
 /**
  * constantRoutes
  * a base page that does not have permission requirements
@@ -51,7 +68,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '主页', icon: 'dashboard' }
     }]
   },
 
@@ -167,7 +184,7 @@ export const constantRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: [...constantRoutes, ...asyncRouters]
 })
 
 const router = createRouter()
